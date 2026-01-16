@@ -5,10 +5,10 @@ using Microsoft.Extensions.FileProviders;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add HttpContextAccessor
+//  HttpContextAccessor
 builder.Services.AddHttpContextAccessor();
 
-// Add services with JSON options to handle circular references
+// services with JSON options to handle circular references
 builder.Services.AddControllers()
     .AddJsonOptions(options =>
     {
@@ -32,7 +32,7 @@ builder.Services.AddSwaggerGen(c =>
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("PostgresConnection")));
 
-// CORS - IMPORTANT: Must be before building the app
+// CORS 
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowAll", policy =>
@@ -58,7 +58,7 @@ Console.WriteLine($"Uploads: {uploadsPath}");
 Console.WriteLine($"Exists: {Directory.Exists(uploadsPath)}");
 Console.WriteLine("===========================================");
 
-// Use default static files middleware (serves from wwwroot)
+// default static files middleware (serves from wwwroot)
 app.UseStaticFiles();
 
 Console.WriteLine("Static files enabled (serving from wwwroot)");
@@ -78,14 +78,14 @@ using (var scope = app.Services.CreateScope())
     }
 }
 
-// Middleware - ORDER MATTERS!
+// Middleware 
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "DOOH API v1"));
 }
 
-// CORS must come before Authorization and MapControllers
+
 app.UseCors("AllowAll");
 app.UseAuthorization();
 app.MapControllers();

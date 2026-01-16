@@ -8,7 +8,7 @@ namespace DoohAdManager.Models
         public int AdId { get; set; }
         public Ad Ad { get; set; } = null!;
         
-        public int PlayOrder { get; set; } // REQUIRED: sequence number
+        public int PlayOrder { get; set; } //  sequence number
     }
 }
 

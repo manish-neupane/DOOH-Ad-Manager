@@ -182,7 +182,22 @@ The application will be available at:
 - **Web UI:** `http://localhost:4200`
 
 ---
+## 📸 Application Screenshots
 
+### Screens Management
+![Screens](screenshots/Screen.png)
+
+### Advertisements
+![Ads](screenshots/ads.png)
+
+### Campaign Scheduling
+![Campaigns](screenshots/campaigns.png)
+
+### Playlist Viewer
+![Playlist](screenshots/playlist.png)
+
+### Proof of Play Reports
+![Proof of Play](screenshots/proof-of-play.png)
 ## 📡 API Documentation
 
 ### Base URL

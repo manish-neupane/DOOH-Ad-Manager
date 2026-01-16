@@ -1,0 +1,107 @@
+<div class="screens-container">
+  <div class="header">
+    <h1>Screens</h1>
+    <button class="btn-primary" (click)="openForm()">
+      <span class="icon">+</span> New Screen
+    </button>
+  </div>
+
+  <div class="screens-grid">
+    <div *ngFor="let screen of screens" class="screen-card">
+      <div class="card-header">
+        <h3>{{ screen.name }}</h3>
+        <span class="status-badge" [ngClass]="getStatusClass(screen.status)">
+          {{ screen.status }}
+        </span>
+      </div>
+      
+      <div class="card-body">
+        <div class="info-row">
+          <span class="label">Location:</span>
+          <span class="value">{{ screen.location }}</span>
+        </div>
+        <div class="info-row" *ngIf="screen.resolution">
+          <span class="label">Resolution:</span>
+          <span class="value">{{ screen.resolution }}</span>
+        </div>
+        <div class="info-row" *ngIf="screen.orientation">
+          <span class="label">Orientation:</span>
+          <span class="value">{{ screen.orientation }}</span>
+        </div>
+      </div>
+
+      <div class="card-actions">
+        <button class="btn-secondary" (click)="openForm(screen)">Edit</button>
+        <button class="btn-danger" (click)="deleteScreen(screen.id)">Delete</button>
+        <select 
+          class="status-select" 
+          [value]="screen.status" 
+          (change)="updateStatus(screen, $any($event.target).value)">
+          <option *ngFor="let status of statuses" [value]="status">{{ status }}</option>
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal Form -->
+  <div class="modal" *ngIf="showForm" (click)="closeForm()">
+    <div class="modal-content" (click)="$event.stopPropagation()">
+      <div class="modal-header">
+        <h2>{{ editingScreen ? 'Edit Screen' : 'New Screen' }}</h2>
+        <button class="close-btn" (click)="closeForm()">×</button>
+      </div>
+      
+      <form (ngSubmit)="saveScreen()">
+        <div class="form-group">
+          <label>Name *</label>
+          <input 
+            type="text" 
+            [(ngModel)]="formData.name" 
+            name="name" 
+            required 
+            placeholder="Enter screen name">
+        </div>
+
+        <div class="form-group">
+          <label>Location *</label>
+          <input 
+            type="text" 
+            [(ngModel)]="formData.location" 
+            name="location" 
+            required 
+            placeholder="Enter location">
+        </div>
+
+        <div class="form-group">
+          <label>Status</label>
+          <select [(ngModel)]="formData.status" name="status">
+            <option *ngFor="let status of statuses" [value]="status">{{ status }}</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Resolution</label>
+          <input 
+            type="text" 
+            [(ngModel)]="formData.resolution" 
+            name="resolution" 
+            placeholder="e.g., 1920x1080">
+        </div>
+
+        <div class="form-group">
+          <label>Orientation</label>
+          <input 
+            type="text" 
+            [(ngModel)]="formData.orientation" 
+            name="orientation" 
+            placeholder="e.g., Landscape">
+        </div>
+
+        <div class="form-actions">
+          <button type="button" class="btn-secondary" (click)="closeForm()">Cancel</button>
+          <button type="submit" class="btn-primary">Save</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

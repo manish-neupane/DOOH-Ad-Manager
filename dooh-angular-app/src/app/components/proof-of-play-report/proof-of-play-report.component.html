@@ -1,0 +1,66 @@
+<div class="report-container">
+  <h2>Proof of Play Report</h2>
+
+  <div class="filters">
+    <div class="form-group">
+      <label>Screen (Optional):</label>
+      <select [(ngModel)]="selectedScreenId" name="screen">
+        <option [value]="0">All Screens</option>
+        <option *ngFor="let screen of screens" [value]="screen.id">
+          {{ screen.name }}
+        </option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label>Start Date:</label>
+      <input type="date" [(ngModel)]="startDate" name="startDate">
+    </div>
+
+    <div class="form-group">
+      <label>End Date:</label>
+      <input type="date" [(ngModel)]="endDate" name="endDate">
+    </div>
+
+    <button class="btn-primary" (click)="loadReport()" [disabled]="loading">
+      {{ loading ? 'Loading...' : 'Generate Report' }}
+    </button>
+
+    <button class="btn-secondary" (click)="exportToCSV()" 
+            [disabled]="proofOfPlayData.length === 0">
+      Export CSV
+    </button>
+  </div>
+
+  <div class="report-stats" *ngIf="proofOfPlayData.length > 0">
+    <div class="stat-card">
+      <h3>Total Plays</h3>
+      <p class="stat-value">{{ proofOfPlayData.length }}</p>
+    </div>
+  </div>
+
+  <div class="report-table">
+    <table *ngIf="proofOfPlayData.length > 0">
+      <thead>
+        <tr>
+          <th>Screen ID</th>
+          <th>Ad ID</th>
+          <th>Played At</th>
+          <th>Campaign ID</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let item of proofOfPlayData">
+          <td>{{ item.screenId }}</td>
+          <td>{{ item.adId }}</td>
+          <td>{{ formatDate(item.playedAt) }}</td>
+          <td>{{ item.campaignId || 'N/A' }}</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div *ngIf="proofOfPlayData.length === 0 && !loading" class="no-data">
+      <p>No proof of play records found for the selected criteria.</p>
+    </div>
+  </div>
+</div>

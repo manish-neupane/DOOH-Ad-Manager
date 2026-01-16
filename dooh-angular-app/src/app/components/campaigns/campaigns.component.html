@@ -1,0 +1,137 @@
+<div class="campaigns-container">
+  <div class="header">
+    <h1>Campaigns</h1>
+    <button class="btn-primary" (click)="openForm()">
+      <span class="icon">+</span> New Campaign
+    </button>
+  </div>
+
+  <div class="campaigns-list">
+    <div *ngFor="let campaign of campaigns" class="campaign-card">
+      <div class="card-header">
+        <h3>{{ campaign.name }}</h3>
+        <span class="play-order">Order: {{ campaign.playOrder }}</span>
+      </div>
+      
+      <div class="card-body">
+        <div class="info-row">
+          <span class="label">Screens:</span>
+          <span class="value">{{ getScreenNames(campaign) }}</span>
+        </div>
+        <div class="info-row">
+          <span class="label">Ads:</span>
+          <span class="value">{{ getAdNames(campaign) }}</span>
+        </div>
+        <div class="info-row">
+          <span class="label">Start:</span>
+          <span class="value">{{ formatDate(campaign.startTime) }}</span>
+        </div>
+        <div class="info-row">
+          <span class="label">End:</span>
+          <span class="value">{{ formatDate(campaign.endTime) }}</span>
+        </div>
+      </div>
+
+      <div class="card-actions">
+        <button class="btn-secondary" (click)="openForm(campaign)">Edit</button>
+        <button class="btn-danger" (click)="deleteCampaign(campaign.id)">Delete</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal Form -->
+  <div class="modal" *ngIf="showForm" (click)="closeForm()">
+    <div class="modal-content" (click)="$event.stopPropagation()">
+      <div class="modal-header">
+        <h2>{{ editingCampaign ? 'Edit Campaign' : 'New Campaign' }}</h2>
+        <button class="close-btn" (click)="closeForm()">×</button>
+      </div>
+      
+      <form (ngSubmit)="saveCampaign()">
+        <div class="form-group">
+          <label>Campaign Name *</label>
+          <input 
+            type="text" 
+            [(ngModel)]="formData.name" 
+            name="name" 
+            required 
+            placeholder="Enter campaign name">
+        </div>
+
+        <!-- UPDATED: Screens with Checkboxes -->
+   <!-- Screens with Checkboxes -->
+<div class="form-group">
+  <label>Screens * (Select at least one)</label>
+  <div class="checkbox-list">
+    <div *ngFor="let screen of screens" class="checkbox-item">
+      <ng-container *ngIf="screen.id !== undefined">
+        <input 
+          type="checkbox" 
+          [id]="'screen-' + screen.id"
+          [value]="screen.id"
+          [checked]="isScreenSelected(screen.id)"
+          (change)="toggleScreen(screen.id, $event)">
+        <label [for]="'screen-' + screen.id">
+          {{ screen.name }} - {{ screen.location }}
+        </label>
+      </ng-container>
+    </div>
+  </div>
+</div>
+
+<!-- Ads with Checkboxes -->
+<div class="form-group">
+  <label>Advertisements * (Select at least one)</label>
+  <div class="checkbox-list">
+    <div *ngFor="let ad of ads" class="checkbox-item">
+      <ng-container *ngIf="ad.id !== undefined">
+        <input 
+          type="checkbox" 
+          [id]="'ad-' + ad.id"
+          [value]="ad.id"
+          [checked]="isAdSelected(ad.id)"
+          (change)="toggleAd(ad.id, $event)">
+        <label [for]="'ad-' + ad.id">
+          {{ ad.title }} ({{ ad.durationSeconds }}s)
+        </label>
+      </ng-container>
+    </div>
+  </div>
+</div>
+
+        <div class="form-group">
+          <label>Start Time *</label>
+          <input 
+            type="datetime-local" 
+            [(ngModel)]="formData.startTime" 
+            name="startTime" 
+            required>
+        </div>
+
+        <div class="form-group">
+          <label>End Time *</label>
+          <input 
+            type="datetime-local" 
+            [(ngModel)]="formData.endTime" 
+            name="endTime" 
+            required>
+        </div>
+
+        <div class="form-group">
+          <label>Play Order</label>
+          <input 
+            type="number" 
+            [(ngModel)]="formData.playOrder" 
+            name="playOrder" 
+            min="1"
+            placeholder="1">
+        </div>
+
+        <div class="form-actions">
+          <button type="button" class="btn-secondary" (click)="closeForm()">Cancel</button>
+          <button type="submit" class="btn-primary">Save</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

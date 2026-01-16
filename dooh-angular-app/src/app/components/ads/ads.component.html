@@ -1,0 +1,98 @@
+<div class="ads-container">
+  <div class="header">
+    <h1>Advertisements</h1>
+    <button class="btn-primary" (click)="openForm()">
+      <span class="icon">+</span> Upload Ad
+    </button>
+  </div>
+
+  <div class="ads-grid">
+    <div *ngFor="let ad of ads" class="ad-card">
+      <div class="media-preview" *ngIf="ad.mediaUrl">
+        <video *ngIf="ad.mediaType?.startsWith('video')" [src]="ad.mediaUrl" controls></video>
+        <img *ngIf="ad.mediaType?.startsWith('image')" [src]="ad.mediaUrl" [alt]="ad.title">
+        <div *ngIf="!ad.mediaType?.startsWith('video') && !ad.mediaType?.startsWith('image')" class="no-preview">
+          <span class="icon">📄</span>
+          <p>{{ ad.mediaType }}</p>
+        </div>
+      </div>
+
+      <div class="card-content">
+        <h3>{{ ad.title }}</h3>
+        
+        <div class="info-grid">
+          <div class="info-item">
+            <span class="label">Duration:</span>
+            <span class="value">{{ formatDuration(ad.durationSeconds) }}</span>
+          </div>
+          <div class="info-item" *ngIf="ad.fileSize">
+            <span class="label">File Size:</span>
+            <span class="value">{{ formatFileSize(ad.fileSize) }}</span>
+          </div>
+          <div class="info-item" *ngIf="ad.mediaType">
+            <span class="label">Type:</span>
+            <span class="value">{{ ad.mediaType }}</span>
+          </div>
+          <div class="info-item" *ngIf="ad.createdAt">
+            <span class="label">Created:</span>
+            <span class="value">{{ ad.createdAt | date:'short' }}</span>
+          </div>
+        </div>
+
+        <div class="card-actions">
+          <button class="btn-danger" (click)="deleteAd(ad.id)">Delete</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Upload Modal -->
+  <div class="modal" *ngIf="showForm" (click)="closeForm()">
+    <div class="modal-content" (click)="$event.stopPropagation()">
+      <div class="modal-header">
+        <h2>Upload Advertisement</h2>
+        <button class="close-btn" (click)="closeForm()">×</button>
+      </div>
+      
+      <form (ngSubmit)="uploadAd()">
+        <div class="form-group">
+          <label>Name *</label>
+          <input 
+            type="text" 
+            [(ngModel)]="formData.name" 
+            name="name" 
+            required 
+            placeholder="Enter ad name">
+        </div>
+
+        <div class="form-group">
+          <label>Duration (seconds) *</label>
+          <input 
+            type="number" 
+            [(ngModel)]="formData.duration" 
+            name="duration" 
+            required 
+            min="1"
+            placeholder="Enter duration">
+        </div>
+
+        <div class="form-group">
+          <label>Media File *</label>
+          <div class="file-input-wrapper">
+            <input 
+              type="file" 
+              (change)="onFileSelected($event)"
+              accept="video/*,image/*"
+              required>
+            <p class="file-name" *ngIf="selectedFile">{{ selectedFile.name }}</p>
+          </div>
+        </div>
+
+        <div class="form-actions">
+          <button type="button" class="btn-secondary" (click)="closeForm()">Cancel</button>
+          <button type="submit" class="btn-primary" [disabled]="!selectedFile">Upload</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

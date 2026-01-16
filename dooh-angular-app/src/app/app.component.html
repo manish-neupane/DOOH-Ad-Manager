@@ -1,0 +1,53 @@
+<div class="app-container">
+  <nav class="sidebar" [class.open]="menuOpen">
+    <div class="sidebar-header">
+      <h2>{{ title }}</h2>
+      <button class="menu-toggle mobile-only" (click)="toggleMenu()">×</button>
+    </div>
+    
+    <ul class="nav-menu">
+      <li>
+        <a routerLink="/screens" routerLinkActive="active" (click)="closeMenu()">
+          <span class="icon">🖥️</span>
+          <span>Screens</span>
+        </a>
+      </li>
+      <li>
+        <a routerLink="/ads" routerLinkActive="active" (click)="closeMenu()">
+          <span class="icon">📺</span>
+          <span>Advertisements</span>
+        </a>
+      </li>
+      <li>
+        <a routerLink="/campaigns" routerLinkActive="active" (click)="closeMenu()">
+          <span class="icon">📅</span>
+          <span>Campaigns</span>
+        </a>
+      </li>
+      <li>
+        <a routerLink="/playlist" routerLinkActive="active" (click)="closeMenu()">
+          <span class="icon">▶️</span>
+          <span>Playlist Viewer</span>
+        </a>
+      </li>
+      <li><a routerLink="/proof-of-play" routerLinkActive="active">
+  <span class="icon">📊</span> Proof of Play
+</a></li>
+    </ul>
+
+    <div class="sidebar-footer">
+      <p>DOOH Management System</p>
+      <p class="version">v1.0.0</p>
+    </div>
+  </nav>
+
+  <button class="menu-toggle mobile-only" (click)="toggleMenu()" [class.hidden]="menuOpen">
+    ☰
+  </button>
+
+  <main class="main-content">
+    <router-outlet></router-outlet>
+  </main>
+</div>
+
+<div class="overlay" *ngIf="menuOpen" (click)="closeMenu()"></div>
